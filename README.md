@@ -30,18 +30,65 @@ Contains the application code and an integration test.
   wiring.
 - **AgentTest** – example integration test that verifies a simple scenario.
 
-## Running the Tests
+## Configuration
 
-The tests require a valid OpenAI API key and access to the target web
-application. Provide configuration via `test/src/main/resources/openai.properties`
-and `playwright.properties`.
+The agent reads settings from property files in `test/src/main/resources`.
 
-```bash
-mvn test
+### OpenAI
+
+Fill in `openai.properties` with your credentials and options:
+
+```properties
+openai.key=sk-your-key
+openai.max-completion-tokens=1024
+openai.instructions-path=classpath:instruction.txt
 ```
 
-The test launches a Playwright-controlled Chromium instance, navigates to the
-configured URL and lets the agent drive the scenario.
+The `openai.instructions-path` points to a text file with system instructions
+that guide the model during the test run.
+
+### Playwright
+
+Specify the target web application in `playwright.properties`:
+
+```properties
+playwright.app-host=https://example.org
+```
+
+Playwright launches a Chromium browser and navigates to this URL before the
+scenario begins.
+
+### Customising the Scenario
+
+Edit `instruction.txt` to describe the steps the agent should take. The file is
+referenced by `openai.instructions-path` and can include detailed guidance and
+expected outcomes.
+
+## Running
+
+After configuring the properties, build and run from the repository root.
+Ensure JDK 21 and Maven 3.9+ are installed and that the OpenAI key grants
+network access.
+
+### Run the integration test
+
+```bash
+mvn -pl test test
+```
+
+The test launches the agent, which interacts with the browser until it calls the
+`finish` tool.
+
+### Run the application manually
+
+To experiment interactively, start the Spring Boot application:
+
+```bash
+mvn -pl test spring-boot:run
+```
+
+The application listens on `http://localhost:8080` and executes the configured
+scenario.
 
 ## Requirements
 
@@ -53,4 +100,3 @@ configured URL and lets the agent drive the scenario.
 ## License
 
 This project is provided for demonstration purposes without warranty.
-
