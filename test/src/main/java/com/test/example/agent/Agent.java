@@ -7,6 +7,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+/**
+ * Coordinates the interaction between the LLM and the MCP tools to execute a test scenario.
+ */
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -16,6 +19,13 @@ public class Agent {
 
     private final LLMClient llm;
 
+    /**
+     * Executes the provided test scenario until the LLM signals completion.
+     *
+     * @param testScenario textual description of the test steps
+     * @return final {@link Action} returned by the LLM (typically a finish action)
+     * @throws JsonProcessingException if tool results cannot be deserialized
+     */
     public Action executeTestScenario(String testScenario) throws JsonProcessingException {
 
         log.info("Executing test scenario:\n{}", testScenario);
@@ -37,6 +47,5 @@ public class Agent {
 
         return action;
     }
-
 
 }
