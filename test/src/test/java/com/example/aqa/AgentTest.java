@@ -24,6 +24,9 @@ public class AgentTest {
     /**
      * Executes a sample scenario and asserts that the agent reports success.
      */
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @SneakyThrows
     @Test
     public void test() {
@@ -36,7 +39,7 @@ public class AgentTest {
                 Expected result - After clicking "Code", the clone popup/dropdown opens showing cloning options (HTTPS, SSH, GitHub CLI) and a copyable repository URL (options like "Open with GitHub Desktop" and "Download ZIP" are visible).
                 """);
 
-        var parsedResult = new ObjectMapper().readValue(result.functionArguments(), Finish.class);
+        var parsedResult = objectMapper.readValue(result.functionArguments(), Finish.class);
         Assertions.assertThat(parsedResult.isSuccess())
                 .as(parsedResult.getDescription())
                 .isTrue();
