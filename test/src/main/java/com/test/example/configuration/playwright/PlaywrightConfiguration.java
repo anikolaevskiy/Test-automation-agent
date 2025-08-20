@@ -2,6 +2,7 @@ package com.test.example.configuration.playwright;
 
 import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserType;
+import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.Playwright;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -26,21 +27,48 @@ public class PlaywrightConfiguration {
     }
 
     /**
+     * Creates a Playwright instance.
+     *
+     * @return managed Playwright instance
+     */
+    @Bean(destroyMethod = "close")
+    public Playwright playwright() {
+        return Playwright.create();
+    }
+
+    /**
+     * Launches a Chromium {@link Browser} using the provided options.
+     *
+     * @param playwright Playwright instance
+     * @param options    launch options
+     * @return launched browser
+     */
+    @Bean(destroyMethod = "close")
+    public Browser browser(Playwright playwright, BrowserType.LaunchOptions options) {
+        return playwright.chromium().launch(options);
+    }
+
+    /**
+     * Creates a new {@link BrowserContext} with a predefined viewport.
+     *
+     * @param browser browser instance
+     * @return configured browser context
+     */
+    @Bean(destroyMethod = "close")
+    public BrowserContext browserContext(Browser browser) {
+        return browser.newContext(new Browser.NewContextOptions()
+                .setViewportSize(1280, 800));
+    }
+
+    /**
      * Creates a Playwright {@link Page} and navigates to the configured host.
      *
      * @param properties Playwright configuration properties
-     * @param options    browser launch options
+     * @param context    browser context
      * @return initialized page instance
      */
     @Bean(destroyMethod = "close")
-    public Page playwrightPage(PlaywrightProperties properties, BrowserType.LaunchOptions options) {
-        var playwright = Playwright.create();
-        var chromium = playwright.chromium();
-        var browser = chromium.launch(options);
-
-        var context = browser.newContext(new Browser.NewContextOptions()
-                .setViewportSize(1280, 800));
-
+    public Page playwrightPage(PlaywrightProperties properties, BrowserContext context) {
         var page = context.newPage();
         page.navigate(properties.appHost());
         return page;
