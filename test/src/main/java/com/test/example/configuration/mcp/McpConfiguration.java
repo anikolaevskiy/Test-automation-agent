@@ -36,7 +36,7 @@ public class McpConfiguration {
      */
     @Bean
     @Profile("playwright")
-    public PlaywrightTools playwrightTools(Page page) {
+    public Tools playwrightTools(Page page) {
         return new PlaywrightTools(page);
     }
 }
