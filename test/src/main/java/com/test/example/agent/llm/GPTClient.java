@@ -1,23 +1,25 @@
 package com.test.example.agent.llm;
 
 import com.openai.client.OpenAIClient;
-import com.openai.models.chat.completions.*;
 import com.test.example.agent.Action;
+import com.test.example.configuration.openai.OpenAIProperties;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * {@link LLMClient} implementation that uses the OpenAI GPT model to decide on actions.
  */
 @Component
+@Scope("prototype")
 @RequiredArgsConstructor
 public class GPTClient implements LLMClient {
 
     private final OpenAIClient openAIClient;
 
-    private final ChatCompletionCreateParams.Builder params;
+    private final OpenAIProperties properties;
+
+    private Conversation conversation;
 
     /**
      * Adds the scenario description to the conversation context.
@@ -26,7 +28,7 @@ public class GPTClient implements LLMClient {
      */
     @Override
     public void setUpScenario(String scenario) {
-        params.addUserMessage(scenario);
+        this.conversation = new Conversation(properties, scenario);
     }
 
     /**
@@ -39,25 +41,11 @@ public class GPTClient implements LLMClient {
      */
     @Override
     public Action requestNextAction(String screenshot, int width, int height) {
-        params.addUserMessageOfArrayOfContentParts(
-                List.of(
-                        ChatCompletionContentPart.ofText(
-                                ChatCompletionContentPartText.builder()
-                                        .text(String.format("Screenshot of the page, size %d x %d", width, height))
-                                        .build()),
-
-                        ChatCompletionContentPart.ofImageUrl(
-                                ChatCompletionContentPartImage.builder()
-                                        .imageUrl(ChatCompletionContentPartImage.ImageUrl.builder()
-                                                .url("data:image/png;base64," + screenshot)
-                                                .detail(ChatCompletionContentPartImage.ImageUrl.Detail.HIGH)
-                                                .build())
-                                        .build())
-                ));
+        var params = conversation.build(screenshot, width, height);
 
         var function = openAIClient.chat()
                 .completions()
-                .create(params.build())
+                .create(params)
                 .choices()
                 .getFirst()
                 .message()
@@ -68,9 +56,10 @@ public class GPTClient implements LLMClient {
                 .orElseThrow()
                 .function();
 
-        params.addAssistantMessage(function.name() + " " + function.arguments());
+        var action = new Action(function.name(), function.arguments());
+        conversation.addAssistantMessage(action.name() + " " + action.arguments());
 
-        return new Action(function.name(), function.arguments());
+        return action;
     }
 
 }
