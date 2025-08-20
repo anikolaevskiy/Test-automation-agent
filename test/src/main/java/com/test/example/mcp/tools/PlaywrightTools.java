@@ -6,12 +6,23 @@ import org.springframework.stereotype.Component;
 
 import java.util.Base64;
 
+/**
+ * {@link Tools} implementation backed by Playwright.
+ * Allows the LLM to interact with a real browser instance.
+ */
 @Component
 @RequiredArgsConstructor
 public class PlaywrightTools implements Tools {
 
     private final Page page;
 
+    /**
+     * Clicks at the provided coordinates and returns the updated screenshot.
+     *
+     * @param x horizontal coordinate
+     * @param y vertical coordinate
+     * @return result of the click including a screenshot
+     */
     @Override
     public Result clickXY(int x, int y) {
         page.mouse().click(x, y);
@@ -24,6 +35,11 @@ public class PlaywrightTools implements Tools {
         );
     }
 
+    /**
+     * Captures a screenshot of the current page.
+     *
+     * @return screenshot encoded as Base64 along with its dimensions
+     */
     @Override
     public Result screenshot() {
         return new Result(

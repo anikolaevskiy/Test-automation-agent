@@ -8,6 +8,13 @@ import org.springframework.core.io.Resource;
 
 import java.io.IOException;
 
+/**
+ * Configuration properties for the OpenAI integration.
+ *
+ * @param key                API key used to access OpenAI
+ * @param maxCompletionTokens maximum number of completion tokens
+ * @param instructionsPath   path to system instructions for the model
+ */
 @PropertySource("classpath:openai.properties")
 @ConfigurationProperties(prefix = "openai")
 @ConfigurationPropertiesScan
@@ -17,6 +24,11 @@ public record OpenAIProperties(
         Resource instructionsPath
 ) {
 
+    /**
+     * Loads system instructions from the configured resource.
+     *
+     * @return instruction text
+     */
     @SneakyThrows(IOException.class)
     public String instructions() {
         return new String(instructionsPath.getInputStream().readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);

@@ -8,15 +8,30 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Spring configuration for creating Playwright browser instances.
+ */
 @Configuration
 @EnableConfigurationProperties(PlaywrightProperties.class)
 public class PlaywrightConfiguration {
 
+    /**
+     * Configures default Playwright launch options.
+     *
+     * @return launch options with headless mode disabled
+     */
     @Bean
     public BrowserType.LaunchOptions playwrightOptions() {
         return new BrowserType.LaunchOptions().setHeadless(false);
     }
 
+    /**
+     * Creates a Playwright {@link Page} and navigates to the configured host.
+     *
+     * @param properties Playwright configuration properties
+     * @param options    browser launch options
+     * @return initialized page instance
+     */
     @Bean(destroyMethod = "close")
     public Page playwrightPage(PlaywrightProperties properties, BrowserType.LaunchOptions options) {
         var playwright = Playwright.create();

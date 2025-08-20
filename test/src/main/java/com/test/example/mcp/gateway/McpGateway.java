@@ -9,12 +9,23 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
+/**
+ * Gateway for invoking MCP tools and converting their JSON responses to {@link Tools.Result}.
+ */
 @Component
 @RequiredArgsConstructor
 public class McpGateway {
 
     private final ToolCallbackProvider provider;
 
+    /**
+     * Calls an MCP tool by its name with the provided JSON arguments.
+     *
+     * @param toolName the name of the tool to execute
+     * @param jsonArgs JSON representation of the tool arguments
+     * @return the parsed {@link Tools.Result} returned by the tool
+     * @throws JsonProcessingException if the returned JSON cannot be deserialized
+     */
     public Tools.Result call(String toolName, String jsonArgs) throws JsonProcessingException {
         var tool = Arrays.stream(provider.getToolCallbacks())
                 .filter(t -> t.getToolDefinition().name().equals(toolName))

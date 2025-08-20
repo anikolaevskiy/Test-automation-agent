@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+/**
+ * {@link LLMClient} implementation that uses the OpenAI GPT model to decide on actions.
+ */
 @Component
 @RequiredArgsConstructor
 public class GPTClient implements LLMClient {
@@ -16,11 +19,24 @@ public class GPTClient implements LLMClient {
 
     private final ChatCompletionCreateParams.Builder params;
 
+    /**
+     * Adds the scenario description to the conversation context.
+     *
+     * @param scenario textual test scenario
+     */
     @Override
     public void setUpScenario(String scenario) {
         params.addUserMessage(scenario);
     }
 
+    /**
+     * Sends the screenshot to the LLM and returns the next action.
+     *
+     * @param screenshot Base64 encoded screenshot
+     * @param width      screenshot width
+     * @param height     screenshot height
+     * @return action suggested by the LLM
+     */
     @Override
     public Action requestNextAction(String screenshot, int width, int height) {
         params.addUserMessageOfArrayOfContentParts(
