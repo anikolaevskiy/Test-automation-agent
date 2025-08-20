@@ -17,6 +17,7 @@ import java.util.Arrays;
 public class McpGateway {
 
     private final ToolCallbackProvider provider;
+    private final ObjectMapper objectMapper;
 
     /**
      * Calls an MCP tool by its name with the provided JSON arguments.
@@ -34,6 +35,6 @@ public class McpGateway {
 
         var result = tool.call(jsonArgs);
 
-        return new ObjectMapper().readValue(result, Tools.Result.class);
+        return objectMapper.readValue(result, Tools.Result.class);
     }
 }
