@@ -2,7 +2,6 @@ package com.test.example.mcp.tools;
 
 import com.microsoft.playwright.Page;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 import java.util.Base64;
 
@@ -10,7 +9,6 @@ import java.util.Base64;
  * {@link Tools} implementation backed by Playwright.
  * Allows the LLM to interact with a real browser instance.
  */
-@Component
 @RequiredArgsConstructor
 public class PlaywrightTools implements Tools {
 
