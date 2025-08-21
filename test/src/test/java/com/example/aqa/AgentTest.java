@@ -40,11 +40,11 @@ public class AgentTest {
                 """);
 
         var parsedResult = objectMapper.readValue(result.functionArguments(), Finish.class);
-        Assertions.assertThat(parsedResult.isSuccess())
-                .as(parsedResult.getDescription())
+        Assertions.assertThat(parsedResult.success())
+                .as(parsedResult.description())
                 .isTrue();
 
-        log.info("Test completed successfully. Result: {}", parsedResult.getDescription());
+        log.info("Test completed successfully. Result: {}", parsedResult.description());
     }
 }
 
