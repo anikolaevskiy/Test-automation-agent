@@ -3,7 +3,13 @@ package com.test.example.agent.llm;
 import com.test.example.agent.Action;
 
 /**
- * Abstraction of a language model capable of deciding the next action based on a screenshot.
+ * Abstraction of a language model capable of deciding the next action based on
+ * a screenshot of the current browser state.
+ * <p>
+ * Implementations encapsulate the communication details with a particular model
+ * provider. This allows the {@link com.test.example.agent.Agent} to remain
+ * provider-agnostic and makes it straightforward to plug in alternative LLMs
+ * (local or remote) by implementing this interface.
  */
 public interface LLMClient {
 

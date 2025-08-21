@@ -12,6 +12,12 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * Spring configuration for the OpenAI client and default chat parameters.
+ * <p>
+ * The {@link ChatCompletionCreateParams} bean defines the system instructions
+ * and the list of tools that the model can invoke. To expose additional
+ * actions to the LLM, create a new tool record under
+ * {@code com.test.example.agent.llm.tools} and register it here using
+ * {@code ChatCompletionCreateParams.Builder#addTool}.
  */
 @Configuration
 @EnableConfigurationProperties(OpenAIProperties.class)
@@ -32,6 +38,9 @@ public class OpenAIConfiguration {
 
     /**
      * Provides a template for creating chat completion requests.
+     * <p>
+     * To make new actions available to the model, extend the builder with an
+     * {@code addTool(<yourTool>.class)} call.
      *
      * @param properties OpenAI configuration properties
      * @return builder preconfigured with model, instructions and available tools
