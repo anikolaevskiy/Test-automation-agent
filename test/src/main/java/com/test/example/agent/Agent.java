@@ -48,7 +48,7 @@ public class Agent {
         log.info("Initial action: {} {}", action.functionName(), action.functionArguments());
 
         var iteration = 0;
-        while ((!action.functionName().equals("finish")) || (iteration < maxIterations)) {
+        while (!action.functionName().equals("finish") && iteration < maxIterations) {
 
             var actionResult = mcp.call(action.functionName(), action.functionArguments());
             log.info("Action executed with result: {}", actionResult.message());
