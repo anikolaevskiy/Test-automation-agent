@@ -4,8 +4,6 @@ import com.openai.client.OpenAIClient;
 import com.openai.models.chat.completions.*;
 import com.test.example.agent.Action;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -18,7 +16,6 @@ import java.util.List;
  * LLM providers can be supported by creating alternative {@link LLMClient}
  * implementations following the same pattern.
  */
-@Component
 @AllArgsConstructor
 public class GPTClient implements LLMClient {
 
