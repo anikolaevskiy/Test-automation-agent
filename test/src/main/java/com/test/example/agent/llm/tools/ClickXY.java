@@ -3,27 +3,13 @@ package com.test.example.agent.llm.tools;
 import com.fasterxml.jackson.annotation.JsonClassDescription;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import org.springframework.stereotype.Component;
 
 /**
  * Tool parameters describing a click at certain coordinates.
  */
-@Component
 @JsonTypeName("click_xy")
 @JsonClassDescription("Click at specified coordinates")
-public class ClickXY implements MCPTool {
-
-    /** X center coordinate. */
-    @JsonPropertyDescription("X center coordinate")
-    public int x;
-
-    /** Y center coordinate. */
-    @JsonPropertyDescription("Y center coordinate")
-    public int y;
-
-    /**
-     * Explanation why this action is needed to be performed.
-     */
-    @JsonPropertyDescription("Explanation why this action is needed to be performed")
-    public String description;
+public record ClickXY(@JsonPropertyDescription("X center coordinate") int x,
+                      @JsonPropertyDescription("Y center coordinate") int y,
+                      @JsonPropertyDescription("Explanation why this action is needed to be performed") String description) {
 }

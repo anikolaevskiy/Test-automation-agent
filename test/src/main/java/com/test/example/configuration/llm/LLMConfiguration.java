@@ -26,7 +26,7 @@ public class LLMConfiguration {
      */
     @Bean
     @Profile("openai")
-    public LLMClient llm(OpenAIClient openAiClient, ChatCompletionCreateParams.Builder params) {
+    public LLMClient llm(OpenAIClient openAiClient, ChatCompletionCreateParams params) {
         return new GPTClient(openAiClient, params);
     }
 }

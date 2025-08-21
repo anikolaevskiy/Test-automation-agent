@@ -9,17 +9,11 @@ import org.springframework.stereotype.Component;
 /**
  * Tool parameters for signalling the end of a test scenario.
  */
-@Component
+
 @JsonTypeName("finish")
 @JsonClassDescription("Stop the test execution")
-@Data
-public class Finish implements MCPTool {
-
-    /** Indicates whether the scenario succeeded. */
-    @JsonPropertyDescription("Is the test execution successful or not")
-    private boolean success;
-
-    /** Description of the test execution result. */
-    @JsonPropertyDescription("Description of the test execution result")
-    private String description;
+public record Finish(@JsonPropertyDescription("Is the test execution successful or not")
+                     boolean success,
+                     @JsonPropertyDescription("Description of the test execution result")
+                     String description) {
 }

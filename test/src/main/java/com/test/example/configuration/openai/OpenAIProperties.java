@@ -7,6 +7,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.Resource;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Configuration properties for the OpenAI integration.
@@ -31,7 +32,7 @@ public record OpenAIProperties(
      */
     @SneakyThrows(IOException.class)
     public String instructions() {
-        return new String(instructionsPath.getInputStream().readAllBytes(), java.nio.charset.StandardCharsets.UTF_8);
+        return new String(instructionsPath.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
 
     }
 }
