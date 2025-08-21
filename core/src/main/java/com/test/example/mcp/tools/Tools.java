@@ -14,10 +14,8 @@ import org.springframework.ai.tool.annotation.Tool;
  *   <li>Add a new method to this interface and annotate it with {@link Tool}.</li>
  *   <li>Provide a record describing the tool parameters (see
  *   {@code com.test.example.agent.llm.tools} for examples) and expose it to the
- *   LLM in {@link com.test.example.configuration.openai.OpenAIConfiguration} via
- *   {@code ChatCompletionCreateParams.Builder#addTool}.</li>
- *   <li>Implement the method in a {@link Tools} implementation such as
- *   {@link com.test.example.mcp.tools.PlaywrightTools}.</li>
+ *   LLM in your configuration via {@code ChatCompletionCreateParams.Builder#addTool}.</li>
+ *   <li>Implement the method in a class implementing this interface.</li>
  *   <li>Ensure your implementation is registered as a bean so that
  *   {@link com.test.example.mcp.gateway.McpGateway} can discover it (see
  *   {@link com.test.example.configuration.mcp.McpConfiguration}).</li>

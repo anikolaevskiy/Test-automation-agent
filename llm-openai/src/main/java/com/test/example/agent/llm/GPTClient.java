@@ -8,13 +8,13 @@ import lombok.AllArgsConstructor;
 import java.util.List;
 
 /**
- * {@link LLMClient} implementation that delegates reasoning to the OpenAI GPT
+ * Language model client implementation that delegates reasoning to the OpenAI GPT
  * model.
  * <p>
  * The client keeps track of the conversation with the model, sends page
  * screenshots and extracts the tool call the model wants to perform. Different
- * LLM providers can be supported by creating alternative {@link LLMClient}
- * implementations following the same pattern.
+ * LLM providers can be supported by creating alternative implementations following
+ * the same pattern.
  */
 @AllArgsConstructor
 public class GPTClient implements LLMClient {

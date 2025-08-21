@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
 /**
- * Configures the {@link LLMClient} implementation used by the agent.
+ * Configures the language model client used by the agent.
  * <p>
  * Different language model providers can be supplied by introducing additional
  * beans conditioned on Spring profiles. The included {@code openai} profile
@@ -22,13 +22,13 @@ import org.springframework.context.annotation.Profile;
 public class LLMConfiguration {
 
     /**
-     * Creates an OpenAI-based {@link LLMClient} when the "openai" profile is active.
+     * Creates an OpenAI-based client when the "openai" profile is active.
      * Additional profiles can instantiate other implementations (e.g. local
      * models) without modifying the agent.
      *
      * @param openAiClient OpenAI client
      * @param params       chat completion parameters
-     * @return GPT-backed implementation of {@link LLMClient}
+     * @return GPT-backed language model client
      */
     @Bean
     @Profile("openai")

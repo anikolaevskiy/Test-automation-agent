@@ -1,4 +1,4 @@
-package com.test.example.configuration.comman;
+package com.test.example.configuration.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;

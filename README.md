@@ -15,19 +15,41 @@ OpenAI API for reasoning about screenshots.
 
 ## Modules and Key Components
 
-### `test` module
+### `core`
 
-Contains the application code and an integration test.
+Domain model and shared infrastructure.
 
 - **Agent** – orchestrates the conversation with the LLM and the execution of
   [MCP](https://github.com/modelcontextprotocol) tools.
-- **McpGateway** – looks up and invokes registered MCP tools.
-- **Tools / PlaywrightTools** – tool interface and Playwright implementation
-  providing `click_xy` and `screenshot` functions.
-- **LLMClient / GPTClient** – abstraction and OpenAI implementation for asking
-  the model what to do next.
-- **Configuration** – Spring configuration classes for Playwright, MCP and LLM
-  wiring.
+- **Action** – describes a tool invocation requested by the model.
+- **Tools / McpGateway** – tool interface and gateway for invoking tool methods.
+- **AgentProperties / CommonConfiguration** – common configuration and settings.
+- **Tool Schemas** – records describing tool parameters such as `ClickXY` and
+  `Finish`.
+
+### `llm-openai`
+
+OpenAI-specific client and configuration.
+
+- **GPTClient** – OpenAI implementation of the language model client.
+- **OpenAIConfiguration / OpenAIProperties** – configure API access and default
+  chat parameters.
+- **Resources** – `openai.properties` and `instruction.txt`.
+
+### `tools-playwright`
+
+Playwright-based MCP tools and browser configuration.
+
+- **PlaywrightTools** – implementation of `Tools` backed by Playwright.
+- **PlaywrightConfiguration / PlaywrightProperties** – create and configure the
+  browser.
+- **Resources** – `playwright.properties`.
+
+### `app`
+
+Application wiring and tests.
+
+- **AgentConfiguration / MainConfiguration** – assemble the agent for tests.
 - **AgentTest** – example integration test that verifies a simple scenario.
 
 ## Architecture and Extensibility
@@ -43,29 +65,34 @@ be replaced or extended without touching the other.
 To expose an additional action to the agent:
 
 1. **Describe the tool parameters.** Create a record under
-   `test/src/main/java/com/test/example/agent/llm/tools`. Each field becomes a
+   `core/src/main/java/com/test/example/agent/llm/tools`. Each field becomes a
    model argument.
 2. **Declare the tool contract.** Add a method to the
-   `com.test.example.mcp.tools.Tools` interface and annotate it with
-   `@Tool`. The method should return a `Tools.Result`.
-3. **Implement the behaviour.** Extend an existing `Tools` implementation
-   (e.g. `com.test.example.mcp.tools.PlaywrightTools`) or provide your own class
-   and implement the method.
+   `com.test.example.mcp.tools.Tools` interface and annotate it with `@Tool`.
+   The method should return a `Tools.Result`.
+3. **Implement the behaviour.** Extend an existing implementation such as
+   `tools-playwright` or provide your own class and implement the method.
 4. **Register the tool with the LLM.** In
-   `com.test.example.configuration.openai.OpenAIConfiguration` add
-   `addTool(YourTool.class)` to the `ChatCompletionCreateParams` builder so the
-   model knows about it.
+   `llm-openai/src/main/java/com/test/example/configuration/openai/OpenAIConfiguration`
+   add `addTool(YourTool.class)` to the `ChatCompletionCreateParams` builder so
+   the model knows about it.
 5. **Expose the implementation.** Ensure your `Tools` implementation is
    registered as a bean in
-   `com.test.example.configuration.mcp.McpConfiguration` so the gateway can
-   discover it.
+   `core/src/main/java/com/test/example/configuration/mcp/McpConfiguration` so
+   the gateway can discover it.
 
 After these steps the agent will automatically consider the new action during a
 test run. No changes to the core orchestration logic are required.
 
 ## Configuration
 
-The agent reads settings from property files in `test/src/main/resources`.
+The agent reads settings from module-specific property files:
+
+- `core/src/main/resources/agent.properties` – general agent settings.
+- `llm-openai/src/main/resources/openai.properties` – OpenAI credentials and
+  instruction file path.
+- `tools-playwright/src/main/resources/playwright.properties` – Playwright
+  options and target application.
 
 ### OpenAI
 
@@ -106,7 +133,7 @@ network access.
 ### Run the integration test
 
 ```bash
-mvn -pl test test
+mvn -pl app test
 ```
 
 The test launches the agent, which interacts with the browser until it calls the
@@ -117,7 +144,7 @@ The test launches the agent, which interacts with the browser until it calls the
 To experiment interactively, start the Spring Boot application:
 
 ```bash
-mvn -pl test spring-boot:run
+mvn -pl app spring-boot:run
 ```
 
 The application listens on `http://localhost:8080` and executes the configured

@@ -6,12 +6,12 @@ import lombok.RequiredArgsConstructor;
 import java.util.Base64;
 
 /**
- * Default {@link Tools} implementation backed by a Playwright {@link Page}.
+ * Default tools implementation backed by a Playwright {@link Page}.
  * <p>
  * Each method translates the abstract tool contract into concrete browser
- * interactions and returns a {@link Result} that contains a screenshot for the
- * LLM. The class demonstrates how tools can be implemented against any other
- * automation framework – implement {@link Tools} yourself and expose it via the
+ * interactions and returns a result that contains a screenshot for the LLM.
+ * The class demonstrates how tools can be implemented against any other
+ * automation framework – implement the interface yourself and expose it via the
  * Spring configuration to extend the agent with domain specific actions.
  */
 @RequiredArgsConstructor

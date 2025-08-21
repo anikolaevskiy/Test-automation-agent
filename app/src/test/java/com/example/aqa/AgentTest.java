@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 /**
- * Integration test that runs a full scenario through the {@link Agent} and verifies the result.
+ * Integration test that runs a full scenario through the agent and verifies the result.
  */
 @Slf4j
 @SpringBootTest(classes = MainConfiguration.class)
@@ -21,12 +21,12 @@ public class AgentTest {
     @Autowired
     private Agent agent;
 
-    /**
-     * Executes a sample scenario and asserts that the agent reports success.
-     */
     @Autowired
     private ObjectMapper objectMapper;
 
+    /**
+     * Executes a sample scenario and asserts that the agent reports success.
+     */
     @SneakyThrows
     @Test
     public void test() {

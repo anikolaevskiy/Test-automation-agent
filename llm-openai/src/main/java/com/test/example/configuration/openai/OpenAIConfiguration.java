@@ -15,8 +15,7 @@ import org.springframework.context.annotation.Configuration;
  * <p>
  * The {@link ChatCompletionCreateParams} bean defines the system instructions
  * and the list of tools that the model can invoke. To expose additional
- * actions to the LLM, create a new tool record under
- * {@code com.test.example.agent.llm.tools} and register it here using
+ * actions to the LLM, create a new tool record and register it using
  * {@code ChatCompletionCreateParams.Builder#addTool}.
  */
 @Configuration

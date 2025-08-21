@@ -1,13 +1,8 @@
-package com.test.example.configuration.comman;
+package com.test.example.configuration.common;
 
-import lombok.SneakyThrows;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.io.Resource;
-
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 /**
  * Configuration properties that control the behaviour of the {@link com.test.example.agent.Agent}.
