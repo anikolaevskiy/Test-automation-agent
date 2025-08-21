@@ -3,8 +3,6 @@ package com.test.example.agent.llm.tools;
 import com.fasterxml.jackson.annotation.JsonClassDescription;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import lombok.Data;
-import org.springframework.stereotype.Component;
 
 /**
  * Schema used by the LLM to signal the end of a test scenario.
