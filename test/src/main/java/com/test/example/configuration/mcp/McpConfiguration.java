@@ -1,13 +1,12 @@
 package com.test.example.configuration.mcp;
 
-import com.microsoft.playwright.Page;
-import com.test.example.mcp.tools.PlaywrightTools;
-import com.test.example.mcp.tools.Tools;
+import com.test.example.mcp.tool.McpTool;
 import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.ai.tool.method.MethodToolCallbackProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
+
+import java.util.List;
 
 /**
  * Spring configuration for registering MCP tools and providers.
@@ -16,27 +15,15 @@ import org.springframework.context.annotation.Profile;
 public class McpConfiguration {
 
     /**
-     * Registers MCP tools so they can be discovered by the agent.
+     * Registers MCP tool beans so they can be discovered by the agent.
      *
-     * @param tools implementation of the tools interface
+     * @param mcpTools list of available tools
      * @return provider that exposes the tools
      */
     @Bean
-    public ToolCallbackProvider toolsProvider(Tools tools) {
+    public ToolCallbackProvider toolsProvider(List<McpTool> mcpTools) {
         return MethodToolCallbackProvider.builder()
-                .toolObjects(tools)
+                .toolBeans(mcpTools)
                 .build();
-    }
-
-    /**
-     * Creates a Playwright-backed tools implementation when the "playwright" profile is active.
-     *
-     * @param page Playwright page used by the tools
-     * @return tools instance backed by Playwright
-     */
-    @Bean
-    @Profile("playwright")
-    public Tools playwrightTools(Page page) {
-        return new PlaywrightTools(page);
     }
 }

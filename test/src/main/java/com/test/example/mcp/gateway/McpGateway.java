@@ -2,7 +2,7 @@ package com.test.example.mcp.gateway;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.test.example.mcp.tools.Tools;
+import com.test.example.mcp.tool.Tools;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.stereotype.Component;
