@@ -2,7 +2,6 @@ package com.test.example.configuration.openai;
 
 import lombok.SneakyThrows;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.Resource;
 
@@ -18,7 +17,6 @@ import java.nio.charset.StandardCharsets;
  */
 @PropertySource("classpath:openai.properties")
 @ConfigurationProperties(prefix = "openai")
-@ConfigurationPropertiesScan
 public record OpenAIProperties(
         String key,
         int maxCompletionTokens,
