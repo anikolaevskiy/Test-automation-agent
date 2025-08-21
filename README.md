@@ -27,7 +27,7 @@ Domain model and shared infrastructure.
 - **Tool Schemas** – records describing tool parameters such as `ClickXY` and
   `Finish`.
 
-### `llm-openai`
+### `llm/openai`
 
 OpenAI-specific client and configuration.
 
@@ -36,7 +36,7 @@ OpenAI-specific client and configuration.
   chat parameters.
 - **Resources** – `openai.properties` and `instruction.txt`.
 
-### `tools-playwright`
+### `mcp/playwright`
 
 Playwright-based MCP tools and browser configuration.
 
@@ -71,9 +71,9 @@ To expose an additional action to the agent:
    `com.test.example.mcp.tools.Tools` interface and annotate it with `@Tool`.
    The method should return a `Tools.Result`.
 3. **Implement the behaviour.** Extend an existing implementation such as
-   `tools-playwright` or provide your own class and implement the method.
+   `mcp/playwright` or provide your own class and implement the method.
 4. **Register the tool with the LLM.** In
-   `llm-openai/src/main/java/com/test/example/configuration/openai/OpenAIConfiguration`
+   `llm/openai/src/main/java/com/test/example/configuration/openai/OpenAIConfiguration`
    add `addTool(YourTool.class)` to the `ChatCompletionCreateParams` builder so
    the model knows about it.
 5. **Expose the implementation.** Ensure your `Tools` implementation is
@@ -89,9 +89,9 @@ test run. No changes to the core orchestration logic are required.
 The agent reads settings from module-specific property files:
 
 - `core/src/main/resources/agent.properties` – general agent settings.
-- `llm-openai/src/main/resources/openai.properties` – OpenAI credentials and
+- `llm/openai/src/main/resources/openai.properties` – OpenAI credentials and
   instruction file path.
-- `tools-playwright/src/main/resources/playwright.properties` – Playwright
+- `mcp/playwright/src/main/resources/playwright.properties` – Playwright
   options and target application.
 
 ### OpenAI
