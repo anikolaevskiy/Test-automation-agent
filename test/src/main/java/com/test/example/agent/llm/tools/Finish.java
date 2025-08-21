@@ -4,14 +4,16 @@ import com.fasterxml.jackson.annotation.JsonClassDescription;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
 /**
  * Tool parameters for signalling the end of a test scenario.
  */
+@Component
 @JsonTypeName("finish")
 @JsonClassDescription("Stop the test execution")
 @Data
-public class Finish {
+public class Finish implements MCPTool {
 
     /** Indicates whether the scenario succeeded. */
     @JsonPropertyDescription("Is the test execution successful or not")

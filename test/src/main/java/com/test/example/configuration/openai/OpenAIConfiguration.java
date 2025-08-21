@@ -4,11 +4,13 @@ import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.models.ChatModel;
 import com.openai.models.chat.completions.ChatCompletionCreateParams;
-import com.test.example.agent.llm.tools.ClickXY;
-import com.test.example.agent.llm.tools.Finish;
+import com.test.example.agent.llm.tools.MCPTool;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+
+import java.util.List;
 
 /**
  * Spring configuration for the OpenAI client and default chat parameters.
@@ -37,12 +39,14 @@ public class OpenAIConfiguration {
      * @return builder preconfigured with model, instructions and available tools
      */
     @Bean
-    public ChatCompletionCreateParams.Builder params(OpenAIProperties properties) {
-        return ChatCompletionCreateParams.builder()
+    @Scope("prototype")
+    public ChatCompletionCreateParams.Builder params(OpenAIProperties properties, List<MCPTool> tools) {
+        var params =  ChatCompletionCreateParams.builder()
                 .model(ChatModel.GPT_5)
                 .maxCompletionTokens(properties.maxCompletionTokens())
-                .addSystemMessage(properties.instructions())
-                .addTool(ClickXY.class)
-                .addTool(Finish.class);
+                .addSystemMessage(properties.instructions());
+        tools.forEach(tool -> params.addTool(tool.getClass()));
+
+        return params;
     }
 }
