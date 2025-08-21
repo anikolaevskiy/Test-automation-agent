@@ -3,8 +3,6 @@ package com.test.example.configuration;
 import com.test.example.agent.Agent;
 import com.test.example.agent.llm.LLMClient;
 import com.test.example.configuration.common.AgentProperties;
-import com.test.example.configuration.llm.LLMConfiguration;
-import com.test.example.configuration.mcp.McpConfiguration;
 import com.test.example.mcp.gateway.McpGateway;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -21,8 +19,10 @@ import org.springframework.context.annotation.Import;
  */
 @Configuration
 @EnableConfigurationProperties(AgentProperties.class)
-@Import({McpConfiguration.class,
-        LLMConfiguration.class})
+@Import({
+        com.test.example.configuration.mcp.McpConfiguration.class,
+        com.test.example.configuration.llm.LLMConfiguration.class
+})
 public class AgentConfiguration {
 
     /**

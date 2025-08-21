@@ -1,5 +1,6 @@
 package com.test.example.configuration;
 
+import com.test.example.configuration.AgentConfiguration;
 import com.test.example.configuration.playwright.PlaywrightConfiguration;
 import com.test.example.configuration.common.CommonConfiguration;
 import org.springframework.context.annotation.ComponentScan;
