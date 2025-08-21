@@ -7,7 +7,11 @@ import lombok.Data;
 import org.springframework.stereotype.Component;
 
 /**
- * Tool parameters for signalling the end of a test scenario.
+ * Schema used by the LLM to signal the end of a test scenario.
+ * <p>
+ * When the model emits a call to the {@code finish} tool, the agent interprets
+ * it as a termination signal. The record carries the outcome of the scenario so
+ * tests can assert on the success flag and description.
  */
 
 @JsonTypeName("finish")

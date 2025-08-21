@@ -10,13 +10,23 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 /**
- * Spring configuration for registering MCP tools and providers.
+ * Spring configuration that exposes {@link Tools} implementations to Spring AI.
+ * <p>
+ * The configuration wires the {@link ToolCallbackProvider} used by the
+ * {@link com.test.example.mcp.gateway.McpGateway}. Custom tool implementations
+ * can be registered here as beans. The provided {@code playwright} profile
+ * showcases how to supply a Playwright-based set of tools; additional profiles
+ * or beans can be added to integrate with other automation backends.
  */
 @Configuration
 public class McpConfiguration {
 
     /**
      * Registers MCP tools so they can be discovered by the agent.
+     * <p>
+     * When introducing a new {@link Tools} implementation simply expose it as a
+     * bean and this provider will automatically make all annotated methods
+     * available to the {@link com.test.example.agent.Agent}.
      *
      * @param tools implementation of the tools interface
      * @return provider that exposes the tools

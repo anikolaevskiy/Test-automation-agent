@@ -10,7 +10,15 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 
 /**
- * Gateway for invoking MCP tools and converting their JSON responses to {@link Tools.Result}.
+ * Gateway responsible for delegating tool invocations to Spring AI and parsing
+ * the responses.
+ * <p>
+ * Tools are exposed as {@link org.springframework.ai.tool.ToolCallback}s by
+ * the framework. The gateway locates a tool by name, executes it and converts
+ * the returned JSON into a {@link Tools.Result} record understood by the
+ * agent. This indirection keeps the agent agnostic of the actual tool
+ * implementation and allows new tools to be plugged in without changing the
+ * agent code.
  */
 @Component
 @RequiredArgsConstructor

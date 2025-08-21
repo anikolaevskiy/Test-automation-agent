@@ -8,7 +8,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 /**
- * Coordinates the interaction between the LLM and the MCP tools to execute a test scenario.
+ * Core orchestrator of the test automation agent.
+ * <p>
+ * The agent receives a textual scenario, asks the {@link LLMClient} to suggest the
+ * next action and delegates its execution to the configured MCP tools through
+ * the {@link McpGateway}. The cycle repeats until the LLM returns a
+ * {@code finish} action or the configured amount of iterations is reached.
+ * <p>
+ * The design deliberately separates the decision making (LLM) from the
+ * environment interaction (tools) so both sides can be replaced or extended
+ * independently. Supplying a different {@link LLMClient} implementation or a
+ * new set of tools is enough to adapt the agent to another domain.
  */
 @Slf4j
 @RequiredArgsConstructor

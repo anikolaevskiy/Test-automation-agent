@@ -10,7 +10,13 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
- * {@link LLMClient} implementation that uses the OpenAI GPT model to decide on actions.
+ * {@link LLMClient} implementation that delegates reasoning to the OpenAI GPT
+ * model.
+ * <p>
+ * The client keeps track of the conversation with the model, sends page
+ * screenshots and extracts the tool call the model wants to perform. Different
+ * LLM providers can be supported by creating alternative {@link LLMClient}
+ * implementations following the same pattern.
  */
 @Component
 @AllArgsConstructor
