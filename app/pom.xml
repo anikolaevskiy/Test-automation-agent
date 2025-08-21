@@ -13,14 +13,17 @@
         <dependency>
             <groupId>com.test.agent</groupId>
             <artifactId>core</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.test.agent</groupId>
             <artifactId>llm-openai</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.test.agent</groupId>
             <artifactId>mcp-playwright</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
