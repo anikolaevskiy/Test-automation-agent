@@ -22,8 +22,8 @@ public class PlaywrightConfiguration {
      * @return launch options with headless mode disabled
      */
     @Bean
-    public BrowserType.LaunchOptions playwrightOptions() {
-        return new BrowserType.LaunchOptions().setHeadless(false);
+    public BrowserType.LaunchOptions playwrightOptions(PlaywrightProperties properties) {
+        return new BrowserType.LaunchOptions().setHeadless(properties.headless());
     }
 
     /**

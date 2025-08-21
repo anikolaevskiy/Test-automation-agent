@@ -12,5 +12,5 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource("classpath:playwright.properties")
 @ConfigurationProperties(prefix = "playwright")
 @ConfigurationPropertiesScan
-public record PlaywrightProperties(String appHost) {
+public record PlaywrightProperties(String appHost, boolean headless) {
 }
