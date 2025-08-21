@@ -25,12 +25,12 @@
         </dependency>
         <dependency>
             <groupId>com.test.agent</groupId>
-            <artifactId>openai</artifactId>
+            <artifactId>llm-openai</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.test.agent</groupId>
-            <artifactId>playwright</artifactId>
+            <artifactId>tools-playwright</artifactId>
             <version>${project.version}</version>
         </dependency>
 
