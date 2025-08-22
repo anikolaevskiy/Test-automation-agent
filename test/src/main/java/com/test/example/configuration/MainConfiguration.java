@@ -1,8 +1,9 @@
 package com.test.example.configuration;
 
 import com.test.agent.configuration.LLMConfiguration;
-import com.test.example.configuration.comman.CommonConfiguration;
-import com.test.example.configuration.playwright.PlaywrightConfiguration;
+import com.test.agent.configuration.mcp.PlaywrightMcpConfiguration;
+import com.test.agent.configuration.playwright.PlaywrightConfiguration;
+import com.test.example.configuration.common.CommonConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -19,9 +20,10 @@ import org.springframework.context.annotation.Import;
 @ComponentScan(basePackages = "com.test.example")
 @Import({
         AgentConfiguration.class,
+        PlaywrightMcpConfiguration.class,
         PlaywrightConfiguration.class,
+        LLMConfiguration.class,
         CommonConfiguration.class,
-        LLMConfiguration.class
 })
 public class MainConfiguration {
 }

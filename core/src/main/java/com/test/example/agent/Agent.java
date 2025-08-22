@@ -1,31 +1,18 @@
 package com.test.example.agent;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.test.example.agent.llm.LLMClient;
-import com.test.example.mcp.gateway.McpGateway;
+import com.test.example.agent.llm.LlmClient;
+import com.test.example.agent.mcp.McpGateway;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-/**
- * Core orchestrator of the test automation agent.
- * <p>
- * The agent receives a textual scenario, asks the {@link LLMClient} to suggest the
- * next action and delegates its execution to the configured MCP tools through
- * the {@link McpGateway}. The cycle repeats until the LLM returns a
- * {@code finish} action or the configured amount of iterations is reached.
- * <p>
- * The design deliberately separates the decision making (LLM) from the
- * environment interaction (tools) so both sides can be replaced or extended
- * independently. Supplying a different {@link LLMClient} implementation or a
- * new set of tools is enough to adapt the agent to another domain.
- */
 @Slf4j
 @RequiredArgsConstructor
 public class Agent {
 
     private final McpGateway mcp;
 
-    private final LLMClient llm;
+    private final LlmClient llm;
 
     private final int maxIterations;
 

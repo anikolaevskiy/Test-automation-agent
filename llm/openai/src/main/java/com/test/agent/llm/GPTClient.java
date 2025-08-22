@@ -1,27 +1,26 @@
-package com.test.agent;
+package com.test.agent.llm;
 
 import com.openai.client.OpenAIClient;
-import com.openai.models.chat.completions.ChatCompletionContentPart;
-import com.openai.models.chat.completions.ChatCompletionContentPartImage;
-import com.openai.models.chat.completions.ChatCompletionContentPartText;
-import com.openai.models.chat.completions.ChatCompletionCreateParams;
+import com.openai.models.chat.completions.*;
 import com.test.example.agent.Action;
-import com.test.example.agent.llm.LLMClient;
+import com.test.example.agent.llm.LlmClient;
 import lombok.AllArgsConstructor;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 /**
- * {@link LLMClient} implementation that delegates reasoning to the OpenAI GPT
+ * {@link LlmClient} implementation that delegates reasoning to the OpenAI GPT
  * model.
  * <p>
  * The client keeps track of the conversation with the model, sends page
  * screenshots and extracts the tool call the model wants to perform. Different
- * LLM providers can be supported by creating alternative {@link LLMClient}
+ * LLM providers can be supported by creating alternative {@link LlmClient}
  * implementations following the same pattern.
  */
 @AllArgsConstructor
-public class GPTClient implements LLMClient {
+public class GPTClient implements LlmClient {
 
     private final OpenAIClient openAIClient;
 
@@ -63,22 +62,28 @@ public class GPTClient implements LLMClient {
                                         .build())
                 )).build();
 
-        var function = openAIClient.chat()
+
+        var action =  openAIClient.chat()
                 .completions()
                 .create(params)
                 .choices()
-                .getFirst()
-                .message()
-                .toolCalls()
-                .orElseThrow()
-                .getFirst()
-                .function()
-                .orElseThrow()
-                .function();
+                .stream()
+                .map(ChatCompletion.Choice::message)
+                .map(ChatCompletionMessage::toolCalls)
+                .map(Optional::orElseThrow)
+                .map(Collection::stream)
+                .flatMap(stream -> stream.map(ChatCompletionMessageToolCall::function))
+                .map(Optional::orElseThrow)
+                .map(ChatCompletionMessageFunctionToolCall::function)
+                .peek(function -> params = params.toBuilder().addAssistantMessage(function.name() + " " + function.arguments()).build())
+                .map(function -> new Action(function.name(), function.arguments()))
+                .findFirst()
+                .orElseThrow();
 
-        params = params.toBuilder().addAssistantMessage(function.name() + " " + function.arguments()).build();
+        params = params.toBuilder().addAssistantMessage(action.functionName() + " " + action.functionArguments()).build();
 
-        return new Action(function.name(), function.arguments());
+        return action;
+
     }
 
 }

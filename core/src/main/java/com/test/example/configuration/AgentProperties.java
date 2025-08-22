@@ -1,4 +1,4 @@
-package com.test.example.configuration.comman;
+package com.test.example.configuration;
 
 import com.test.example.agent.Agent;
 import org.springframework.boot.context.properties.ConfigurationProperties;

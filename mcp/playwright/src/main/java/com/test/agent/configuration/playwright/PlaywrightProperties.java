@@ -1,4 +1,4 @@
-package com.test.example.configuration.playwright;
+package com.test.agent.configuration.playwright;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;

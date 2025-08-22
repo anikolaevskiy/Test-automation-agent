@@ -1,7 +1,6 @@
-package com.test.example.configuration.playwright;
+package com.test.agent.configuration.playwright;
 
 import com.microsoft.playwright.*;
-import com.test.example.configuration.playwright.PlaywrightProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

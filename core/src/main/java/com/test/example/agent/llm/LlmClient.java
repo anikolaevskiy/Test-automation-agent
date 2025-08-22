@@ -12,7 +12,7 @@ import com.test.example.agent.Agent;
  * provider-agnostic and makes it straightforward to plug in alternative LLMs
  * (local or remote) by implementing this interface.
  */
-public interface LLMClient {
+public interface LlmClient {
 
     /**
      * Provides the initial test scenario to the LLM.

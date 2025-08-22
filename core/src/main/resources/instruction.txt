@@ -6,7 +6,7 @@ Inputs you receive each turn:
 - screenshot: current app image.
 - screen_size: {width, height} in pixels.
 
-Available tools (function calls):
+Available mcpTools (function calls):
 1) click_xy(x:int, y:int)
    // Java schema:
    // @JsonTypeName("click_xy")
