@@ -21,9 +21,8 @@ public class Agent {
      *
      * @param testScenario textual description of the test steps
      * @return final {@link Action} returned by the LLM (typically a finish action)
-     * @throws JsonProcessingException if tool results cannot be deserialized
      */
-    public Action executeTestScenario(String testScenario) throws JsonProcessingException {
+    public Action executeTestScenario(String testScenario) {
 
         log.info("Executing test scenario:\n{}", testScenario);
         llm.setUpScenario(testScenario);
