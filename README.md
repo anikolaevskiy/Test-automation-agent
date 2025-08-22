@@ -46,18 +46,18 @@ To expose an additional action to the agent:
    `test/src/main/java/com/test/example/agent/llm/tools`. Each field becomes a
    model argument.
 2. **Declare the tool contract.** Add a method to the
-   `com.test.example.mcp.tools.Tools` interface and annotate it with
+   `com.test.tools.mcp.com.test.example.Tools` interface and annotate it with
    `@Tool`. The method should return a `Tools.Result`.
 3. **Implement the behaviour.** Extend an existing `Tools` implementation
-   (e.g. `com.test.example.mcp.tools.PlaywrightTools`) or provide your own class
+   (e.g. `com.test.tools.mcp.com.test.example.PlaywrightTools`) or provide your own class
    and implement the method.
 4. **Register the tool with the LLM.** In
-   `com.test.example.configuration.openai.OpenAIConfiguration` add
+   `com.test.openai.configuration.com.test.example.OpenAIConfiguration` add
    `addTool(YourTool.class)` to the `ChatCompletionCreateParams` builder so the
    model knows about it.
 5. **Expose the implementation.** Ensure your `Tools` implementation is
    registered as a bean in
-   `com.test.example.configuration.mcp.McpConfiguration` so the gateway can
+   `com.test.mcp.configuration.com.test.example.McpConfiguration` so the gateway can
    discover it.
 
 After these steps the agent will automatically consider the new action during a

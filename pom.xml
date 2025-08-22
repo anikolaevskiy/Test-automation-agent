@@ -12,6 +12,9 @@
     <packaging>pom</packaging>
     <modules>
         <module>test</module>
+        <module>core</module>
+        <module>mcp</module>
+        <module>llm</module>
     </modules>
 
     <properties>
