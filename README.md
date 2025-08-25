@@ -10,6 +10,15 @@ An experimental autonomous testing agent that uses a Large Language Model (LLM) 
 
 The decision making lives entirely in the LLM while all side effects are performed by MCP tools. This separation keeps the orchestration simple and allows the automation layer (Playwright, Appium, etc.) to evolve independently from the agent core.
 
+## Project structure
+
+The repository is split into modules so individual pieces can evolve separately:
+
+- **core** – agent engine and shared configuration.
+- **llm** – adapters for LLM providers. Currently contains **llm-openai** with the OpenAI client.
+- **mcp** – MCP gateways and tools for automation frameworks. The sample **mcp-browser** module exposes Playwright actions.
+- **test** – integration tests, Allure helpers and a stub test management client demonstrating end‑to‑end usage.
+
 ## Configuration
 
 All configuration lives in `test/src/test/resources/application.properties`:
