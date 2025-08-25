@@ -10,10 +10,19 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
+/**
+ * Spring wiring that exposes the {@link OpenAiClient} as an {@link LlmClient}.
+ * <p>
+ * The bean is only active under the {@code openai} profile so alternative LLM
+ * implementations can be plugged in for other environments.
+ */
 @Configuration
 @Import(OpenAIConfiguration.class)
 public class OpenAiClientConfiguration {
 
+    /**
+     * Creates the OpenAI-backed {@link LlmClient}.
+     */
     @Bean
     @Profile("openai")
     public LlmClient llm(OpenAIClient openAiClient, ChatCompletionCreateParams params) {

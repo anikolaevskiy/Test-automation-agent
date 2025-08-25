@@ -1,135 +1,61 @@
 # Test Automation Agent
 
-## Overview
+An experimental autonomous testing agent that uses a Large Language Model (LLM) to drive a browser through [Model Context Protocol](https://github.com/modelcontextprotocol) (MCP) tools. The project demonstrates how screenshot analysis and tool execution can be combined to validate a user scenario end‑to‑end.
 
-This repository contains a Maven multi-module project that demonstrates an autonomous
-visual testing agent. The agent executes test scenarios by iteratively:
+## How it works
 
-1. Taking a screenshot of the target web page.
-2. Sending the screenshot and scenario context to a large language model (LLM).
-3. Executing tool calls returned by the LLM (clicks or finishing the test).
+1. **Screenshot** – the agent captures the current browser view using a Playwright powered MCP tool.
+2. **Reason** – the screenshot and test context are sent to the LLM which decides which tool to invoke next.
+3. **Act** – the chosen tool is executed (e.g. `click_xy` or `finish`) and the loop continues until the model stops the scenario or the action limit is reached.
 
-The project is built with **Java 21** and **Spring Boot** and relies on
-[Playwright](https://playwright.dev/) for browser automation and the
-OpenAI API for reasoning about screenshots.
-
-## Modules and Key Components
-
-### `test` module
-
-Contains the application code and an integration test.
-
-- **Agent** – orchestrates the conversation with the LLM and the execution of
-  [MCP](https://github.com/modelcontextprotocol) mcpTools.
-- **McpGateway** – looks up and invokes registered MCP mcpTools.
-- **Tools / PlaywrightTools** – tool interface and Playwright implementation
-  providing `click_xy` and `screenshot` functions.
-- **LLMClient / GPTClient** – abstraction and OpenAI implementation for asking
-  the model what to do next.
-- **Configuration** – Spring configuration classes for Playwright, MCP and LLM
-  wiring.
-- **AgentTest** – example integration test that verifies a simple scenario.
-
-## Architecture and Extensibility
-
-The agent deliberately decouples decision making from environment interaction.
-The `LLMClient` analyses screenshots and decides which tool to call next, while
-`Tools` implementations execute the request against the target application.
-Because these pieces communicate only through the `McpGateway`, either side can
-be replaced or extended without touching the other.
-
-### Adding a new tool
-
-To expose an additional action to the agent:
-
-1. **Describe the tool parameters.** Create a record under
-   `test/src/main/java/com/test/example/agent/llm/mcpTools`. Each field becomes a
-   model argument.
-2. **Declare the tool contract.** Add a method to the
-   `com.test.mcpTools.mcp.com.test.example.Tools` interface and annotate it with
-   `@Tool`. The method should return a `Tools.Result`.
-3. **Implement the behaviour.** Extend an existing `Tools` implementation
-   (e.g. `com.test.mcpTools.mcp.com.test.example.PlaywrightTools`) or provide your own class
-   and implement the method.
-4. **Register the tool with the LLM.** In
-   `com.test.openai.configuration.com.test.example.OpenAIConfiguration` add
-   `addTool(YourTool.class)` to the `ChatCompletionCreateParams` builder so the
-   model knows about it.
-5. **Expose the implementation.** Ensure your `Tools` implementation is
-   registered as a bean in
-   `com.test.mcp.configuration.com.test.example.McpConfiguration` so the gateway can
-   discover it.
-
-After these steps the agent will automatically consider the new action during a
-test run. No changes to the core orchestration logic are required.
+The decision making lives entirely in the LLM while all side effects are performed by MCP tools. This separation keeps the orchestration simple and allows each side to evolve independently.
 
 ## Configuration
 
-The agent reads settings from property files in `test/src/main/resources`.
-
-### OpenAI
-
-Fill in `openai.properties` with your credentials and options:
+All configuration lives in `test/src/test/resources/application.properties`:
 
 ```properties
+# API key used for authenticating with OpenAI services
 openai.key=sk-your-key
-openai.max-completion-tokens=1024
-openai.instructions-path=classpath:instruction.txt
 ```
 
-The `openai.instructions-path` points to a text file with system instructions
-that guide the model during the test run.
+Every property in the file is documented in‑line to clarify its purpose. The most important groups are:
 
-### Playwright
+- **Spring** – active profiles and server settings.
+- **Agent** – limits and delays protecting against runaway test runs.
+- **OpenAI** – credentials and model options.
+- **Playwright** – target URL and browser viewport.
 
-Specify the target web application in `playwright.properties`:
+## Extending the agent
 
-```properties
-playwright.app-host=https://example.org
-```
+### Adding a new tool
 
-Playwright launches a Chromium browser and navigates to this URL before the
-scenario begins.
+1. **Describe the tool arguments.** Create a record under `core/src/main/java/com/test/example/llm/tools` and annotate the fields with JSON descriptions.
+2. **Expose the action to the LLM.** Register the record in `OpenAIConfiguration#params` using `.addTool(YourTool.class)`.
+3. **Implement the behaviour.** Add a method to `McpTools` and implement it in `PlaywrightMcpTools` or a custom class.
 
-### Customising the Scenario
+### Plugging a different LLM
 
-Edit `instruction.txt` to describe the steps the agent should take. The file is
-referenced by `openai.instructions-path` and can include detailed guidance and
-expected outcomes.
+Implement `LlmClient` and provide a Spring configuration that exposes it as a bean. Existing agent code will pick it up automatically.
 
 ## Running
 
-After configuring the properties, build and run from the repository root.
-Ensure JDK 21 and Maven 3.9+ are installed and that the OpenAI key grants
-network access.
-
-### Run the integration test
+Build the project with Maven 3.9+ and JDK 21:
 
 ```bash
 mvn -pl test test
 ```
 
-The test launches the agent, which interacts with the browser until it calls the
-`finish` tool.
+The `QAgentTest` integration test demonstrates a complete run, attaching intermediate screenshots to an Allure report.
 
-### Run the application manually
-
-To experiment interactively, start the Spring Boot application:
+To experiment manually start the Spring Boot application:
 
 ```bash
 mvn -pl test spring-boot:run
 ```
 
-The application listens on `http://localhost:8080` and executes the configured
-scenario.
-
-## Requirements
-
-- JDK 21
-- Maven 3.9+
-- OpenAI API key
-- Internet access for the tested application
-
 ## License
 
-This project is provided for demonstration purposes without warranty.
+This project is released under the [Creative Commons Attribution‑NonCommercial 4.0 International](https://creativecommons.org/licenses/by-nc/4.0/) license. It is intended for evaluation and educational use only and may **not** be used for commercial purposes without prior permission.
+
+If you are interested in contributing or developing the idea further, please contact me on [LinkedIn](https://www.linkedin.com/in/nikolaevskiy).

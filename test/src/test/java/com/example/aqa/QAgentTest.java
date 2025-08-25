@@ -1,6 +1,5 @@
 package com.example.aqa;
 
-
 import com.test.example.agent.QAgent;
 import com.test.example.configuration.MainConfiguration;
 import com.test.example.tms.StubTmsClient;
@@ -18,6 +17,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
+/**
+ * Integration test exercising the full agent loop.
+ */
 @Slf4j
 @SpringBootTest(classes = MainConfiguration.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -30,6 +32,7 @@ public class QAgentTest {
     @Autowired
     private StubTmsClient tmsClient;
 
+    /** IDs of test cases to execute, injected from configuration */
     @Getter
     @Value("${tms.ids}")
     private List<String> tmsIds;
@@ -53,4 +56,3 @@ public class QAgentTest {
                 .isTrue();
     }
 }
-

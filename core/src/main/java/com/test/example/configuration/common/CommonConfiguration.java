@@ -10,6 +10,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class CommonConfiguration {
 
+    /**
+     * Creates a default Jackson {@link ObjectMapper}.
+     *
+     * @return new mapper instance
+     */
     @Bean
     public ObjectMapper objectMapper() {
         return new ObjectMapper();

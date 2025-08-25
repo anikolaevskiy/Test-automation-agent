@@ -13,9 +13,7 @@ import org.springframework.context.annotation.Configuration;
 public class PlaywrightConfiguration {
 
     /**
-     * Configures default Playwright launch options.
-     *
-     * @return launch options with headless mode disabled
+     * Builds launch options using the configured headless flag.
      */
     @Bean
     public BrowserType.LaunchOptions playwrightOptions(PlaywrightProperties properties) {
@@ -45,10 +43,8 @@ public class PlaywrightConfiguration {
     }
 
     /**
-     * Creates a new {@link BrowserContext} with a predefined viewport.
-     *
-     * @param browser browser instance
-     * @return configured browser context
+     * Creates a new {@link BrowserContext} with a predefined viewport to ensure
+     * stable coordinates across runs.
      */
     @Bean(destroyMethod = "close")
     public BrowserContext browserContext(Browser browser, PlaywrightProperties properties) {
@@ -58,10 +54,6 @@ public class PlaywrightConfiguration {
 
     /**
      * Creates a Playwright {@link Page} and navigates to the configured host.
-     *
-     * @param properties Playwright configuration properties
-     * @param context    browser context
-     * @return initialized page instance
      */
     @Bean(destroyMethod = "close")
     public Page playwrightPage(PlaywrightProperties properties, BrowserContext context) {

@@ -7,6 +7,9 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
  * Configuration properties for Playwright integration.
  *
  * @param appHost URL of the application under test
+ * @param headless whether to run the browser in headless mode
+ * @param width    viewport width
+ * @param height   viewport height
  */
 @ConfigurationProperties(prefix = "playwright")
 @ConfigurationPropertiesScan

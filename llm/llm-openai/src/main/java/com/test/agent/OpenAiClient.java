@@ -10,6 +10,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * {@link LlmClient} implementation backed by the official OpenAI SDK.
+ * <p>
+ * The client accumulates user messages and submits them as a chat completion
+ * request. The first tool call returned by the model is exposed to the agent.
+ */
 @Slf4j
 @AllArgsConstructor
 public class OpenAiClient implements LlmClient {
@@ -45,6 +51,10 @@ public class OpenAiClient implements LlmClient {
         return this;
     }
 
+    /**
+     * Sends the accumulated conversation to the OpenAI service and returns the
+     * tool call suggested by the model.
+     */
     @Override
     public FunctionToCall send() {
         return openAIClient.chat()
@@ -59,6 +69,7 @@ public class OpenAiClient implements LlmClient {
                 .flatMap(stream -> stream.map(ChatCompletionMessageToolCall::function))
                 .map(Optional::orElseThrow)
                 .map(ChatCompletionMessageFunctionToolCall::function)
+                // include the tool call in the conversation for transparency
                 .peek(function -> params = params.toBuilder().addAssistantMessage(function.name() + " " + function.arguments()).build())
                 .map(function -> new FunctionToCall(function.name(), function.arguments()))
                 .findFirst()
