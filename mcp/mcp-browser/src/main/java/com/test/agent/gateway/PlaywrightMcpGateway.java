@@ -6,6 +6,12 @@ import org.springframework.ai.tool.ToolCallbackProvider;
 
 import java.util.Arrays;
 
+/**
+ * {@link McpGateway} implementation that delegates to Spring AI tool callbacks.
+ * <p>
+ * The gateway looks up the requested tool by name and invokes it. Dedicated
+ * helper methods are provided for the frequently used actions.
+ */
 @RequiredArgsConstructor
 public class PlaywrightMcpGateway implements McpGateway {
 
@@ -21,11 +27,17 @@ public class PlaywrightMcpGateway implements McpGateway {
         return tool.call(jsonArgs);
     }
 
+    /**
+     * Invokes the {@code click_xy} tool.
+     */
     @Override
     public String click(String args) {
         return call("click_xy", args);
     }
 
+    /**
+     * Invokes the {@code screenshot} tool.
+     */
     @Override
     public String screenshot() {
         return call("screenshot", "{}");

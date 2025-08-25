@@ -1,4 +1,5 @@
 package com.test.agent.configuration.mcp;
+
 import com.microsoft.playwright.Page;
 import com.test.agent.configuration.playwright.PlaywrightConfiguration;
 import com.test.agent.gateway.PlaywrightMcpGateway;
@@ -12,10 +13,16 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
+/**
+ * Spring configuration that exposes Playwright based MCP tools and gateway.
+ */
 @Configuration
 @Import(PlaywrightConfiguration.class)
 public class PlaywrightMcpConfiguration {
 
+    /**
+     * Registers methods of {@link McpTools} as Spring AI tool callbacks.
+     */
     @Bean
     public ToolCallbackProvider toolsProvider(McpTools mcpTools) {
         return MethodToolCallbackProvider.builder()
@@ -23,16 +30,21 @@ public class PlaywrightMcpConfiguration {
                 .build();
     }
 
+    /**
+     * Creates the default Playwright tools implementation.
+     */
     @Bean
     @Profile("playwright")
     public PlaywrightMcpTools playwrightTools(Page page) {
         return new PlaywrightMcpTools(page);
     }
 
+    /**
+     * Exposes the {@link McpGateway} that delegates to Spring AI tool callbacks.
+     */
     @Bean
     @Profile("playwright")
     public McpGateway mcpGateway(ToolCallbackProvider tools) {
         return new PlaywrightMcpGateway(tools);
     }
 }
-

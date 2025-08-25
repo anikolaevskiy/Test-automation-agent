@@ -11,6 +11,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Base64;
 
+/**
+ * {@link McpTools} implementation backed by Playwright.
+ * <p>
+ * The class exposes low level actions to the LLM such as clicking at arbitrary
+ * coordinates and capturing screenshots of the current page.
+ */
 @RequiredArgsConstructor
 public class PlaywrightMcpTools implements McpTools {
 
@@ -40,6 +46,7 @@ public class PlaywrightMcpTools implements McpTools {
     @Tool(name = "screenshot")
     public String screenshot() {
         var screenshot = page.screenshot();
+        // Persist the screenshot to disk for later inspection
         Files.write(Path.of("target", System.currentTimeMillis() + ".png"), screenshot);
         return Base64.getEncoder().encodeToString(screenshot);
     }
