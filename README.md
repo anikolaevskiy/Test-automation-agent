@@ -51,6 +51,13 @@ Implement `LlmClient` and provide a Spring configuration that exposes it as a be
 
 Implement your own `McpGateway` and `McpTools` backed by a different automation framework—such as Appium for mobile testing—and register them as Spring beans. The agent will use whichever implementation is available at runtime.
 
+## Pre-requirements
+
+- JDK 21 or higher
+- Maven 3.9+
+- OpenAI API key (or another LLM credential)
+- Internet access to download dependencies
+
 ## Running
 
 Execute the integration tests:
