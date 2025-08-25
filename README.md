@@ -74,6 +74,6 @@ mvn allure:serve
 
 ## License
 
-This project is released under the [Creative Commons Attribution‑NonCommercial 4.0 International](https://creativecommons.org/licenses/by-nc/4.0/) license. It is intended for evaluation and educational use only and may **not** be used for commercial purposes without prior permission.
+This project is released under the [PolyForm Noncommercial License 1.0.0](https://polyformproject.org/licenses/noncommercial/1.0.0). It is intended for evaluation and educational use only and may **not** be used for commercial purposes without prior permission. See the [LICENSE](LICENSE) file for the full text.
 
 If you are interested in contributing or developing the idea further, please contact me on [LinkedIn](https://www.linkedin.com/in/nikolaevskiy).
