@@ -39,10 +39,11 @@ public class QAgentImpl implements QAgent {
     /** upper bound for tool invocations in a single scenario */
     private final int maxActionsNumber;
 
-    private int actionsCounter = 0;
+    private int actionsCounter;
 
     @Override
     public State start(String scenario) {
+        actionsCounter = 0;
         log.info("Starting new scenario: \n{}", scenario);
         llm.addUserMessage(scenario);
         return new State(true, true, mcp.screenshot(), "Started scenario");
