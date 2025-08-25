@@ -37,6 +37,12 @@
                 <groupId>org.springframework.ai</groupId>
                 <artifactId>spring-ai-starter-mcp-server</artifactId>
                 <version>${spring.ai.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework.retry</groupId>
+                        <artifactId>spring-retry</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>com.openai</groupId>

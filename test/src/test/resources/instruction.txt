@@ -48,7 +48,7 @@ WATCHDOG / FALLBACK RULES
 
 TARGET SELECTION & COORDINATES
 - Use the step text and expected result to infer the target. Search for buttons, icons, tabs, links, switches, cards (OCR + visual).
-- Consider EN/RU/PL labels, case, minor typos/synonyms; allow small edit distance for short labels.
+- Consider labels, case, minor typos/synonyms; allow small edit distance for short labels.
 - Prefer exact label match; else partial; else contextual match to the expected result.
 - Avoid re-clicking the same bounding box if it did not change state.
 - For bounding box {left, top, width, height} compute center:

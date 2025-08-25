@@ -5,6 +5,7 @@ import com.openai.models.chat.completions.*;
 import com.test.example.llm.LlmClient;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.retry.support.RetryTemplate;
 
 import java.util.Collection;
 import java.util.List;
@@ -21,6 +22,8 @@ import java.util.Optional;
 public class OpenAiClient implements LlmClient {
 
     private final OpenAIClient openAIClient;
+
+    private final RetryTemplate retry;
 
     private ChatCompletionCreateParams params;
 
@@ -57,7 +60,7 @@ public class OpenAiClient implements LlmClient {
      */
     @Override
     public FunctionToCall send() {
-        return openAIClient.chat()
+        return retry.execute(context -> openAIClient.chat()
                 .completions()
                 .create(params)
                 .choices()
@@ -73,6 +76,6 @@ public class OpenAiClient implements LlmClient {
                 .peek(function -> params = params.toBuilder().addAssistantMessage(function.name() + " " + function.arguments()).build())
                 .map(function -> new FunctionToCall(function.name(), function.arguments()))
                 .findFirst()
-                .orElseThrow(() -> new IllegalStateException("No function call in response from LLM"));
+                .orElseThrow(() -> new IllegalStateException("No function call in response from LLM")));
     }
 }
