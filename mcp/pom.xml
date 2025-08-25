@@ -12,7 +12,7 @@
     <artifactId>mcp</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>playwright</module>
+        <module>mcp-browser</module>
     </modules>
 
     <properties>

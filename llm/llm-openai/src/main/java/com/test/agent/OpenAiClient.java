@@ -1,0 +1,67 @@
+package com.test.agent;
+
+import com.openai.client.OpenAIClient;
+import com.openai.models.chat.completions.*;
+import com.test.example.llm.LlmClient;
+import lombok.AllArgsConstructor;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+
+@AllArgsConstructor
+public class OpenAiClient implements LlmClient {
+
+    private final OpenAIClient openAIClient;
+
+    private ChatCompletionCreateParams params;
+
+    @Override
+    public LlmClient addUserMessage(String message) {
+        params = params.toBuilder().addUserMessage(message).build();
+        return this;
+    }
+
+    @Override
+    public LlmClient addUserMessage(String message, String base64Image) {
+        params = params.toBuilder().addUserMessageOfArrayOfContentParts(
+                List.of(
+                        ChatCompletionContentPart.ofText(
+                                ChatCompletionContentPartText.builder()
+                                        .text(String.format(message))
+                                        .build()),
+
+                        ChatCompletionContentPart.ofImageUrl(
+                                ChatCompletionContentPartImage.builder()
+                                        .imageUrl(ChatCompletionContentPartImage.ImageUrl.builder()
+                                                .url("data:image/png;base64," + base64Image)
+                                                .detail(ChatCompletionContentPartImage.ImageUrl.Detail.HIGH)
+                                                .build())
+                                        .build())
+                )).build();
+
+        return this;
+    }
+
+    @Override
+    public FunctionToCall send() {
+        var response = openAIClient.chat()
+                .completions()
+                .create(params)
+                .choices()
+                .stream()
+                .map(ChatCompletion.Choice::message)
+                .map(ChatCompletionMessage::toolCalls)
+                .map(Optional::orElseThrow)
+                .map(Collection::stream)
+                .flatMap(stream -> stream.map(ChatCompletionMessageToolCall::function))
+                .map(Optional::orElseThrow)
+                .map(ChatCompletionMessageFunctionToolCall::function)
+                .peek(function -> params = params.toBuilder().addAssistantMessage(function.name() + " " + function.arguments()).build())
+                .map(function -> new FunctionToCall(function.name(), function.arguments()))
+                .findFirst()
+                .orElseThrow();
+
+        return response;
+    }
+}

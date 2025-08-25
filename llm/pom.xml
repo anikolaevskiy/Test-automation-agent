@@ -12,7 +12,7 @@
     <artifactId>llm</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>openai</module>
+        <module>llm-openai</module>
     </modules>
 
     <properties>

@@ -24,7 +24,7 @@
         </dependency>
         <dependency>
             <groupId>com.test.agent</groupId>
-            <artifactId>mcp-playwright</artifactId>
+            <artifactId>mcp-browser</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

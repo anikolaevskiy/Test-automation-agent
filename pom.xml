@@ -13,8 +13,8 @@
     <modules>
         <module>test</module>
         <module>core</module>
-        <module>mcp</module>
         <module>llm</module>
+        <module>mcp</module>
     </modules>
 
     <properties>
