@@ -1,14 +1,14 @@
 # Test Automation Agent
 
-An experimental autonomous testing agent that uses a Large Language Model (LLM) to drive a browser through [Model Context Protocol](https://github.com/modelcontextprotocol) (MCP) tools. The project demonstrates how screenshot analysis and tool execution can be combined to validate a user scenario end‑to‑end.
+An experimental autonomous testing agent that uses a Large Language Model (LLM) to drive applications through [Model Context Protocol](https://github.com/modelcontextprotocol) (MCP) tools. The repository ships with a Playwright‑based implementation for web browsers but the architecture allows plugging in other adapters, for example an Appium MCP for mobile apps.
 
 ## How it works
 
-1. **Screenshot** – the agent captures the current browser view using a Playwright powered MCP tool.
+1. **Observe** – the agent captures the current application view through an MCP tool. In this sample the Playwright MCP returns web page screenshots.
 2. **Reason** – the screenshot and test context are sent to the LLM which decides which tool to invoke next.
 3. **Act** – the chosen tool is executed (e.g. `click_xy` or `finish`) and the loop continues until the model stops the scenario or the action limit is reached.
 
-The decision making lives entirely in the LLM while all side effects are performed by MCP tools. This separation keeps the orchestration simple and allows each side to evolve independently.
+The decision making lives entirely in the LLM while all side effects are performed by MCP tools. This separation keeps the orchestration simple and allows the automation layer (Playwright, Appium, etc.) to evolve independently from the agent core.
 
 ## Configuration
 
@@ -24,7 +24,7 @@ Every property in the file is documented in‑line to clarify its purpose. The m
 - **Spring** – active profiles and server settings.
 - **Agent** – limits and delays protecting against runaway test runs.
 - **OpenAI** – credentials and model options.
-- **Playwright** – target URL and browser viewport.
+- **Automation** – settings for the chosen MCP adapter (Playwright URL and viewport in this sample).
 
 ## Extending the agent
 
@@ -38,20 +38,22 @@ Every property in the file is documented in‑line to clarify its purpose. The m
 
 Implement `LlmClient` and provide a Spring configuration that exposes it as a bean. Existing agent code will pick it up automatically.
 
+### Using another MCP
+
+Implement your own `McpGateway` and `McpTools` backed by a different automation framework—such as Appium for mobile testing—and register them as Spring beans. The agent will use whichever implementation is available at runtime.
+
 ## Running
 
-Build the project with Maven 3.9+ and JDK 21:
+Execute the integration tests:
 
 ```bash
-mvn -pl test test
+mvn test
 ```
 
-The `QAgentTest` integration test demonstrates a complete run, attaching intermediate screenshots to an Allure report.
-
-To experiment manually start the Spring Boot application:
+Generate and serve the Allure report:
 
 ```bash
-mvn -pl test spring-boot:run
+mvn allure:serve
 ```
 
 ## License
