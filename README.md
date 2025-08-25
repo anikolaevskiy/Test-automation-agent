@@ -19,6 +19,15 @@ The repository is split into modules so individual pieces can evolve separately:
 - **mcp** – MCP gateways and tools for automation frameworks. The sample **mcp-browser** module exposes Playwright actions.
 - **test** – integration tests, Allure helpers and a stub test management client demonstrating end‑to‑end usage.
 
+## Technologies
+
+- Java 21 with Spring Boot for dependency injection and configuration
+- Maven for build and dependency management
+- Model Context Protocol (MCP) for agent-tool interactions
+- Playwright for browser automation (sample MCP implementation)
+- OpenAI APIs for LLM-driven reasoning
+- Allure for reporting
+
 ## Configuration
 
 All configuration lives in `test/src/test/resources/application.properties`:
