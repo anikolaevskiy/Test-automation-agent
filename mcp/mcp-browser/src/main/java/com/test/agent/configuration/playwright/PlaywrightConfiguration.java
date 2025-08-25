@@ -51,9 +51,9 @@ public class PlaywrightConfiguration {
      * @return configured browser context
      */
     @Bean(destroyMethod = "close")
-    public BrowserContext browserContext(Browser browser) {
+    public BrowserContext browserContext(Browser browser, PlaywrightProperties properties) {
         return browser.newContext(new Browser.NewContextOptions()
-                .setViewportSize(1280, 800));
+                .setViewportSize(properties.width(), properties.height()));
     }
 
     /**

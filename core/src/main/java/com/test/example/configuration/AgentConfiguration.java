@@ -1,11 +1,11 @@
 package com.test.example.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.test.example.llm.LlmClient;
-import com.test.example.mcp.McpGateway;
-import com.test.example.configuration.common.CommonConfiguration;
 import com.test.example.agent.QAgent;
 import com.test.example.agent.QAgentImpl;
+import com.test.example.configuration.common.CommonConfiguration;
+import com.test.example.llm.LlmClient;
+import com.test.example.mcp.McpGateway;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

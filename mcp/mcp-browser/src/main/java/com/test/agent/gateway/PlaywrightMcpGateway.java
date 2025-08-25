@@ -1,6 +1,5 @@
 package com.test.agent.gateway;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.test.example.mcp.McpGateway;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.tool.ToolCallbackProvider;
@@ -11,7 +10,6 @@ import java.util.Arrays;
 public class PlaywrightMcpGateway implements McpGateway {
 
     private final ToolCallbackProvider provider;
-    private final ObjectMapper objectMapper;
 
     @Override
     public String call(String toolName, String jsonArgs) {

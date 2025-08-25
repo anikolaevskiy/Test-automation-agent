@@ -10,6 +10,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.util.Base64;
+
 @Slf4j
 @RequiredArgsConstructor
 public class QAgentImpl implements QAgent {
@@ -80,5 +85,9 @@ public class QAgentImpl implements QAgent {
         log.info("Max actions number reached: {}", maxActionsNumber);
         var finish = new Finish(false, "Max actions number reached");
         return finish(screenshot, objectMapper.writeValueAsString(finish));
+    }
+
+    private static BufferedImage getScreenshotAsImage(String screenshot) throws Exception {
+        return ImageIO.read(new ByteArrayInputStream(Base64.getDecoder().decode(screenshot)));
     }
 }

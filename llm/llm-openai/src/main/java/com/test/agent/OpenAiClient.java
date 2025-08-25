@@ -4,11 +4,13 @@ import com.openai.client.OpenAIClient;
 import com.openai.models.chat.completions.*;
 import com.test.example.llm.LlmClient;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @AllArgsConstructor
 public class OpenAiClient implements LlmClient {
 
@@ -45,7 +47,7 @@ public class OpenAiClient implements LlmClient {
 
     @Override
     public FunctionToCall send() {
-        var response = openAIClient.chat()
+        return openAIClient.chat()
                 .completions()
                 .create(params)
                 .choices()
@@ -60,8 +62,6 @@ public class OpenAiClient implements LlmClient {
                 .peek(function -> params = params.toBuilder().addAssistantMessage(function.name() + " " + function.arguments()).build())
                 .map(function -> new FunctionToCall(function.name(), function.arguments()))
                 .findFirst()
-                .orElseThrow();
-
-        return response;
+                .orElseThrow(() -> new IllegalStateException("No function call in response from LLM"));
     }
 }
