@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Profile;
 
 @Configuration
 @Import(OpenAIConfiguration.class)
-public class LLMConfiguration {
+public class OpenAiClientConfiguration {
 
     @Bean
     @Profile("openai")

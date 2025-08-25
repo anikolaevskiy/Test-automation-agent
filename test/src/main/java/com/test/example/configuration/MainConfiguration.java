@@ -1,9 +1,7 @@
 package com.test.example.configuration;
 
-import com.test.agent.configuration.LLMConfiguration;
+import com.test.agent.configuration.OpenAiClientConfiguration;
 import com.test.agent.configuration.mcp.PlaywrightMcpConfiguration;
-import com.test.agent.configuration.playwright.PlaywrightConfiguration;
-import com.test.example.configuration.common.CommonConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -21,9 +19,7 @@ import org.springframework.context.annotation.Import;
 @Import({
         AgentConfiguration.class,
         PlaywrightMcpConfiguration.class,
-        PlaywrightConfiguration.class,
-        LLMConfiguration.class,
-        CommonConfiguration.class,
+        OpenAiClientConfiguration.class
 })
 public class MainConfiguration {
 }

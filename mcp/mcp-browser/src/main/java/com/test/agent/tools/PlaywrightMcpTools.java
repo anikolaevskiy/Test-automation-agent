@@ -3,8 +3,12 @@ package com.test.agent.tools;
 import com.microsoft.playwright.Page;
 import com.test.example.mcp.McpTools;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.ai.tool.annotation.Tool;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Base64;
 
 @RequiredArgsConstructor
@@ -31,9 +35,12 @@ public class PlaywrightMcpTools implements McpTools {
      *
      * @return screenshot encoded as Base64 along with its dimensions
      */
+    @SneakyThrows(IOException.class)
     @Override
     @Tool(name = "screenshot")
     public String screenshot() {
-        return Base64.getEncoder().encodeToString(page.screenshot());
+        var screenshot = page.screenshot();
+        Files.write(Path.of("target", System.currentTimeMillis() + ".png"), screenshot);
+        return Base64.getEncoder().encodeToString(screenshot);
     }
 }

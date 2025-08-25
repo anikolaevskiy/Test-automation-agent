@@ -1,5 +1,6 @@
 package com.test.agent.configuration.mcp;
 import com.microsoft.playwright.Page;
+import com.test.agent.configuration.playwright.PlaywrightConfiguration;
 import com.test.agent.gateway.PlaywrightMcpGateway;
 import com.test.agent.tools.PlaywrightMcpTools;
 import com.test.example.mcp.McpGateway;
@@ -8,9 +9,11 @@ import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.ai.tool.method.MethodToolCallbackProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
+@Import(PlaywrightConfiguration.class)
 public class PlaywrightMcpConfiguration {
 
     @Bean

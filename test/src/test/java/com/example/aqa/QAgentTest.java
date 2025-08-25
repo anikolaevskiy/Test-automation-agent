@@ -3,34 +3,49 @@ package com.example.aqa;
 
 import com.test.example.agent.QAgent;
 import com.test.example.configuration.MainConfiguration;
-import lombok.SneakyThrows;
+import com.test.example.tms.StubTmsClient;
+import com.test.example.utils.AllureUtils;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
 
 @Slf4j
 @SpringBootTest(classes = MainConfiguration.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@DisplayName("QAgent tests")
 public class QAgentTest {
 
     @Autowired
     private QAgent agent;
 
-    @SneakyThrows
-    @Test
-    public void test() {
+    @Autowired
+    private StubTmsClient tmsClient;
 
-        var scenario = """
-                Step 1 - Green "Code" button is visible and enabled on the repository page
-                Expected result - After clicking "Code", the  (!IMPORTANT) red coloured clone popup/dropdown opens showing cloning options (HTTPS, SSH, GitHub CLI) and a copyable repository URL (options like "Open with GitHub Desktop" and "Download ZIP" are visible).
-                """;
+    @Getter
+    @Value("${tms.ids}")
+    private List<String> tmsIds;
 
+    @DisplayName("QAgent")
+    @ParameterizedTest(name = " | {0}")
+    @MethodSource("getTmsIds")
+    public void qAgentTest(String testCaseId) {
+
+        var scenario = tmsClient.getTestCaseById(testCaseId);
         var state = agent.start(scenario);
+        AllureUtils.addStep("Started scenario execution", state.screenshot(), scenario);
 
         while (state.proceed()) {
             state = agent.nextAction(state.screenshot());
+            AllureUtils.addStep(state.message(), state.screenshot());
         }
 
         Assertions.assertThat(state.successful())

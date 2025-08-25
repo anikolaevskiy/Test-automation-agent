@@ -72,7 +72,7 @@ public class QAgentImpl implements QAgent {
         // Adding delay to mimic human-like interaction and allow UI to stabilize
         Thread.sleep(delay);
 
-        return new State(true, true, mcp.screenshot(), "Next");
+        return new State(true, true, mcp.screenshot(), click.description());
     }
 
     private State finish(String screenshot, String args) throws JsonProcessingException {
