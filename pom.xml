@@ -12,6 +12,9 @@
     <packaging>pom</packaging>
     <modules>
         <module>test</module>
+        <module>core</module>
+        <module>llm</module>
+        <module>mcp</module>
     </modules>
 
     <properties>
@@ -24,6 +27,8 @@
         <lombok.version>1.18.38</lombok.version>
         <openai-java.version>3.1.0</openai-java.version>
         <jackson-databind.version>2.17.2</jackson-databind.version>
+        <allure.version>2.29.1</allure.version>
+        <allure.maven.plugin.version>2.15.2</allure.maven.plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -63,7 +68,45 @@
                 <artifactId>jackson-databind</artifactId>
                 <version>${jackson-databind.version}</version>
             </dependency>
+            <dependency>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-junit5</artifactId>
+                <version>${allure.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <parameters>true</parameters>
+                </configuration>
+            </plugin>
+
+
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
+                <configuration>
+                    <argLine>-javaagent:${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar</argLine>
+                    <systemPropertyVariables>
+                        <allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>io.qameta.allure</groupId>
+                <artifactId>allure-maven</artifactId>
+                <version>${allure.maven.plugin.version}</version>
+            </plugin>
+
+        </plugins>
+    </build>
 
 </project>

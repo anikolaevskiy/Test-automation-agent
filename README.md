@@ -20,8 +20,8 @@ OpenAI API for reasoning about screenshots.
 Contains the application code and an integration test.
 
 - **Agent** – orchestrates the conversation with the LLM and the execution of
-  [MCP](https://github.com/modelcontextprotocol) tools.
-- **McpGateway** – looks up and invokes registered MCP tools.
+  [MCP](https://github.com/modelcontextprotocol) mcpTools.
+- **McpGateway** – looks up and invokes registered MCP mcpTools.
 - **Tools / PlaywrightTools** – tool interface and Playwright implementation
   providing `click_xy` and `screenshot` functions.
 - **LLMClient / GPTClient** – abstraction and OpenAI implementation for asking
@@ -43,21 +43,21 @@ be replaced or extended without touching the other.
 To expose an additional action to the agent:
 
 1. **Describe the tool parameters.** Create a record under
-   `test/src/main/java/com/test/example/agent/llm/tools`. Each field becomes a
+   `test/src/main/java/com/test/example/agent/llm/mcpTools`. Each field becomes a
    model argument.
 2. **Declare the tool contract.** Add a method to the
-   `com.test.example.mcp.tools.Tools` interface and annotate it with
+   `com.test.mcpTools.mcp.com.test.example.Tools` interface and annotate it with
    `@Tool`. The method should return a `Tools.Result`.
 3. **Implement the behaviour.** Extend an existing `Tools` implementation
-   (e.g. `com.test.example.mcp.tools.PlaywrightTools`) or provide your own class
+   (e.g. `com.test.mcpTools.mcp.com.test.example.PlaywrightTools`) or provide your own class
    and implement the method.
 4. **Register the tool with the LLM.** In
-   `com.test.example.configuration.openai.OpenAIConfiguration` add
+   `com.test.openai.configuration.com.test.example.OpenAIConfiguration` add
    `addTool(YourTool.class)` to the `ChatCompletionCreateParams` builder so the
    model knows about it.
 5. **Expose the implementation.** Ensure your `Tools` implementation is
    registered as a bean in
-   `com.test.example.configuration.mcp.McpConfiguration` so the gateway can
+   `com.test.mcp.configuration.com.test.example.McpConfiguration` so the gateway can
    discover it.
 
 After these steps the agent will automatically consider the new action during a
