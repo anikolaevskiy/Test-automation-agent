@@ -45,7 +45,6 @@ public class QAgentImpl implements QAgent {
     public State start(String scenario) {
         log.info("Starting new scenario: \n{}", scenario);
         llm.addUserMessage(scenario);
-        // Immediately capture the initial state of the application
         return new State(true, true, mcp.screenshot(), "Started scenario");
     }
 
@@ -110,13 +109,5 @@ public class QAgentImpl implements QAgent {
         log.info("Max actions number reached: {}", maxActionsNumber);
         var finish = new Finish(false, "Max actions number reached");
         return finish(screenshot, objectMapper.writeValueAsString(finish));
-    }
-
-    /**
-     * Utility method converting a base64 encoded screenshot to an image.
-     * Mainly used for debugging and not part of the main execution path.
-     */
-    private static BufferedImage getScreenshotAsImage(String screenshot) throws Exception {
-        return ImageIO.read(new ByteArrayInputStream(Base64.getDecoder().decode(screenshot)));
     }
 }
