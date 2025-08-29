@@ -19,7 +19,7 @@ public class AllureUtils {
     public static void addStep(String name, String screenshot) {
         byte[] decodedScreenshot = getDecodedScreenshot(screenshot);
         Allure.step(name, () ->
-                Allure.addAttachment("Screen", "image/png", new ByteArrayInputStream(decodedScreenshot), ".png"));
+                Allure.addAttachment("Screen", "image/jpeg", new ByteArrayInputStream(decodedScreenshot), ".jpeg"));
     }
 
     /**

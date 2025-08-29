@@ -1,6 +1,7 @@
 package com.test.agent.configuration.playwright;
 
 import com.microsoft.playwright.*;
+import com.microsoft.playwright.options.ScreenshotType;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -60,5 +61,10 @@ public class PlaywrightConfiguration {
         var page = context.newPage();
         page.navigate(properties.appHost());
         return page;
+    }
+
+    @Bean
+    public Page.ScreenshotOptions screenshotOptions(PlaywrightProperties properties) {
+        return new Page.ScreenshotOptions().setQuality(properties.screenshotQuality()).setType(ScreenshotType.JPEG);
     }
 }

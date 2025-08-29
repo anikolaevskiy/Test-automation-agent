@@ -35,8 +35,8 @@ public class PlaywrightMcpConfiguration {
      */
     @Bean
     @Profile("playwright")
-    public PlaywrightMcpTools playwrightTools(Page page) {
-        return new PlaywrightMcpTools(page);
+    public PlaywrightMcpTools playwrightTools(Page page, Page.ScreenshotOptions screenshotOptions) {
+        return new PlaywrightMcpTools(page, screenshotOptions);
     }
 
     /**

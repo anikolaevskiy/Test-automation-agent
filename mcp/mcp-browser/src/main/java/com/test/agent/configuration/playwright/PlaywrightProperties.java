@@ -13,5 +13,5 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
  */
 @ConfigurationProperties(prefix = "playwright")
 @ConfigurationPropertiesScan
-public record PlaywrightProperties(String appHost, boolean headless, int width, int height) {
+public record PlaywrightProperties(String appHost, boolean headless, int width, int height, int screenshotQuality) {
 }

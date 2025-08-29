@@ -18,6 +18,8 @@ public class PlaywrightMcpTools implements McpTools {
 
     private final Page page;
 
+    private final Page.ScreenshotOptions screenshotOptions;
+
     /**
      * Clicks at the provided coordinates and returns the updated screenshot.
      *
@@ -40,7 +42,7 @@ public class PlaywrightMcpTools implements McpTools {
     @Override
     @Tool(name = "screenshot")
     public String screenshot() {
-        var screenshot = page.screenshot();
+        var screenshot = page.screenshot(screenshotOptions);
         return Base64.getEncoder().encodeToString(screenshot);
     }
 }
