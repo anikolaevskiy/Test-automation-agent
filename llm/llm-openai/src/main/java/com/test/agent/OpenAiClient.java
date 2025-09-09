@@ -39,7 +39,7 @@ public class OpenAiClient implements LlmClient {
                 List.of(
                         ChatCompletionContentPart.ofText(
                                 ChatCompletionContentPartText.builder()
-                                        .text(String.format(message + "\nReturn next function call only base on provided screenshot. Do not include any text in your response."))
+                                        .text(String.format(message + "\nReturn only function to call. Do not include and other content into response."))
                                         .build()),
 
                         ChatCompletionContentPart.ofImageUrl(
@@ -61,14 +61,14 @@ public class OpenAiClient implements LlmClient {
     @Override
     public FunctionToCall send() {
         return retry.execute(context -> openAIClient.chat()
-                        .completions()
-                        .create(params)
-                        .choices()
-                        .stream()
-                        .map(ChatCompletion.Choice::message)
-                        .peek(message -> message.content().ifPresent(content -> log.info("LLM response content: {}", content)))
-                        .map(ChatCompletionMessage::toolCalls)
-                        .map(o -> o.orElseThrow(() -> new IllegalStateException("No function call in response from LLM"))))
+                .completions()
+                .create(params)
+                .choices()
+                .stream()
+                .map(ChatCompletion.Choice::message)
+                .peek(message -> message.content().ifPresent(content -> log.info("LLM response content: {}", content)))
+                .map(ChatCompletionMessage::toolCalls)
+                .map(o -> o.orElseThrow(() -> new IllegalStateException("No function call in response from LLM")))
                 .map(Collection::stream)
                 .flatMap(stream -> stream.map(ChatCompletionMessageToolCall::function))
                 .map(o -> o.orElseThrow(() -> new IllegalStateException("No function call in response from LLM")))
@@ -77,6 +77,6 @@ public class OpenAiClient implements LlmClient {
                 .peek(function -> params = params.toBuilder().addAssistantMessage(function.name() + " " + function.arguments()).build())
                 .map(function -> new FunctionToCall(function.name(), function.arguments()))
                 .findFirst()
-                .orElseThrow(() -> new IllegalStateException("No function call in response from LLM"));
+                .orElseThrow(() -> new IllegalStateException("No function call in response from LLM")));
     }
 }
