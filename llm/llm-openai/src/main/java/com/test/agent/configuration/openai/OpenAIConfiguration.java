@@ -3,6 +3,7 @@ package com.test.agent.configuration.openai;
 import com.openai.client.OpenAIClient;
 import com.openai.client.okhttp.OpenAIOkHttpClient;
 import com.openai.models.ChatModel;
+import com.openai.models.ReasoningEffort;
 import com.openai.models.chat.completions.ChatCompletionCreateParams;
 import com.test.example.llm.tools.ClickXY;
 import com.test.example.llm.tools.Finish;
@@ -51,6 +52,8 @@ public class OpenAIConfiguration {
                 .model(ChatModel.GPT_5)
                 .maxCompletionTokens(properties.maxCompletionTokens())
                 .addSystemMessage(properties.instructions())
+                .verbosity(ChatCompletionCreateParams.Verbosity.LOW)
+                .reasoningEffort(ReasoningEffort.LOW)
                 .addTool(ClickXY.class)
                 .addTool(Finish.class)
                 .build();
